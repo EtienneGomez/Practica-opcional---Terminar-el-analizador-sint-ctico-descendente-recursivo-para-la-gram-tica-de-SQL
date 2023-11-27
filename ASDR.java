@@ -36,3 +36,85 @@ public class ASDR implements Parser{
     }
 
     
+    // D -> distinct P | P
+    private void D(){
+        if(hayErrores)
+            return;
+
+        if(preanalisis.tipo == TipoToken.DISTINCT){
+            match(TipoToken.DISTINCT);
+            P();
+        }
+        else if (preanalisis.tipo == TipoToken.ASTERISCO
+                || preanalisis.tipo == TipoToken.IDENTIFICADOR) {
+            P();
+        }
+        else{
+            hayErrores = true;
+            System.out.println("Se esperaba 'distinct' or '*' or 'identificador'");
+        }
+    }
+
+    // P -> * | A
+    private void P(){
+        if(hayErrores)
+            return;
+
+        if(preanalisis.tipo == TipoToken.ASTERISCO){
+            match(TipoToken.ASTERISCO);
+        }
+        else if(preanalisis.tipo == TipoToken.IDENTIFICADOR){
+            A();
+        }
+        else{
+            hayErrores = true;
+            System.out.println("Se esperaba '*' or 'identificador'");
+        }
+    }
+
+    // A -> A2 A1
+    private void A(){
+        if(hayErrores)
+            return;
+
+        A2();
+        A1();
+    }
+
+    // A2 -> id A3
+    private void A2(){
+        if(hayErrores)
+            return;
+
+        if(preanalisis.tipo == TipoToken.IDENTIFICADOR){
+            match(TipoToken.IDENTIFICADOR);
+            A3();
+        }
+        else{
+            hayErrores = true;
+            System.out.println("Se esperaba un 'identificador'");
+        }
+    }
+
+    // A1 -> , A | Ɛ
+    private void A1(){
+        if(hayErrores)
+            return;
+
+        if(preanalisis.tipo == TipoToken.COMA){
+            match(TipoToken.COMA);
+            A();
+        }
+    }
+
+    // A3 -> . id | Ɛ
+    private void A3(){
+        if(hayErrores)
+            return;
+
+        if(preanalisis.tipo == TipoToken.PUNTO){
+            match(TipoToken.PUNTO);
+            match(TipoToken.IDENTIFICADOR);
+        }
+    }
+    
