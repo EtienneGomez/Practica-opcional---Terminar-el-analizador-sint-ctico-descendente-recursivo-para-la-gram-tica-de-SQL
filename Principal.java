@@ -29,19 +29,11 @@ public class Principal {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-        /*for(Token token : tokens){
-            System.out.println(token);
-        }*/
 
         Parser parser = new ASDR(tokens);
         parser.parse();
     }
 
-    /*
-    El método error se puede usar desde las distintas clases
-    para reportar los errores:
-    Interprete.error(....);
-     */
     static void error(int linea, String mensaje){
         reportar(linea, "", mensaje);
     }
