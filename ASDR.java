@@ -117,4 +117,58 @@ public class ASDR implements Parser{
             match(TipoToken.IDENTIFICADOR);
         }
     }
+     // T -> T2 T1
+    private void T(){
+        if(hayErrores){
+            return;
+        }
+        T2();
+        T1();
+    }
     
+    // T1 -> , T | Ɛ
+    private void T1(){
+        if(hayErrores)
+            return;
+        if(preanalisis.tipo == TipoToken.COMA){
+            match(TipoToken.COMA);
+            T();
+        }
+        
+    }
+    
+    // T2 -> id T3
+    private void T2(){
+        if(hayErrores)
+            return;
+        if(preanalisis.tipo == TipoToken.IDENTIFICADOR){
+            match(TipoToken.IDENTIFICADOR);
+            T3();
+        }
+        else{
+            hayErrores = true;
+            System.out.println("Se esperaba un 'identificador'");
+        }
+    }
+    
+    private void T3(){
+        if(hayErrores)
+            return;
+        if(preanalisis.tipo == TipoToken.IDENTIFICADOR){
+            match(TipoToken.IDENTIFICADOR);
+        }
+    }
+    
+    private void match(TipoToken tt){
+        if(preanalisis.tipo == tt){
+            i++;
+            preanalisis = tokens.get(i);
+        }
+        else{
+            hayErrores = true;
+            System.out.println("Error encontrado");
+        }
+
+    }
+
+}
